@@ -65,7 +65,11 @@ function App() {
 		fetchData()
 	}, [])
 
-	return <div>{products[0] || 'ERROR'}</div>
+	return (
+		<div>
+			{products.map(product => <div>{product.product}</div>) || 'ERROR'}
+		</div>
+	)
 }
 
 export default App
