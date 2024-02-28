@@ -1,24 +1,24 @@
 import { useEffect, useState, useCallback } from 'react'
 import md5 from 'md5'
 import { IProduct } from '../../types'
+import { API_URL, PASSWORD } from '../../app-config'
 
-const useApi = (url: string) => {
+const useApi = () => {
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState<IProduct[]>([])
-	const password = 'Valantis'
 
 	const generateAuthString = useCallback(() => {
 		const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '')
-		const authString = `${password}_${timestamp}`
+		const authString = `${PASSWORD}_${timestamp}`
 		return authString
-	}, [password])
+	}, [])
 
 	const fetchData = useCallback(async () => {
 		const authString = generateAuthString()
 
 		try {
 			setLoading(true)
-			const getIdsResponse = await fetch(url, {
+			const getIdsResponse = await fetch(API_URL, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const useApi = (url: string) => {
 			const idsData = await getIdsResponse.json()
 			const allIds = idsData.result
 
-			const getItemsResponse = await fetch(url, {
+			const getItemsResponse = await fetch(API_URL, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -57,14 +57,12 @@ const useApi = (url: string) => {
 			const itemsData = await getItemsResponse.json()
 			const allItems = itemsData.result
 			setData(allItems)
-
-			console.log('Все товары:', allItems)
 		} catch (error) {
 			console.error('Произошла ошибка:', error)
 		} finally {
 			setLoading(false)
 		}
-	}, [url, generateAuthString])
+	}, [generateAuthString])
 
 	useEffect(() => {
 		fetchData()
