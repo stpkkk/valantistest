@@ -9,9 +9,11 @@ import {
 	Table,
 	Paper,
 } from '@mui/material'
-import useApi from '../hooks/useApi'
-import Loader from './Loader'
+import { IProduct } from '../../types'
 
+interface IAppTable {
+	products: IProduct[]
+}
 // const data = [
 // 	{ id: '415515151', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
 // 	{ id: '41551515', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
@@ -21,10 +23,9 @@ import Loader from './Loader'
 // 	{ id: '4115151', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
 // ]
 
-const AppTable: React.FC = () => {
-	const { loading, data } = useApi()
+const AppTable: React.FC<IAppTable> = ({ products }) => {
 	const [page, setPage] = useState(0)
-	const [rowsPerPage, setRowsPerPage] = useState(10)
+	const [rowsPerPage, setRowsPerPage] = useState(50)
 
 	const handleChangePage = (_event: unknown, newPage: number) => {
 		setPage(newPage)
@@ -36,7 +37,8 @@ const AppTable: React.FC = () => {
 		setRowsPerPage(+event.target.value)
 		setPage(0)
 	}
-	return !loading ? (
+
+	return (
 		<Paper sx={{ my: 10 }}>
 			<TableContainer>
 				<Table>
@@ -49,7 +51,7 @@ const AppTable: React.FC = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data
+						{products
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map((product, index) => (
 								<TableRow key={index}>
@@ -63,17 +65,14 @@ const AppTable: React.FC = () => {
 				</Table>
 			</TableContainer>
 			<TablePagination
-				rowsPerPageOptions={[10, 25, 100]}
 				component='div'
-				count={data.length}
+				count={products.length}
 				rowsPerPage={rowsPerPage}
 				page={page}
 				onPageChange={handleChangePage}
 				onRowsPerPageChange={handleChangeRowsPerPage}
 			/>
 		</Paper>
-	) : (
-		<Loader />
 	)
 }
 

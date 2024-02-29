@@ -1,23 +1,14 @@
-import { CircularProgress, Container, Grid } from '@mui/material'
+import { Container } from '@mui/material'
 import AppTable from './components/AppTable'
+import useApi from './hooks/useApi'
+import Loader from './components/Loader'
 
 function App() {
+	const { loading, data } = useApi()
+
 	return (
 		<Container maxWidth='lg'>
-			{true ? (
-				<AppTable />
-			) : (
-				<Grid
-					container
-					spacing={0}
-					direction='column'
-					alignItems='center'
-					justifyContent='center'
-					sx={{ minHeight: '100vh' }}
-				>
-					<CircularProgress size={100} color='inherit' />
-				</Grid>
-			)}
+			{!loading ? <AppTable products={data} /> : <Loader />}
 		</Container>
 	)
 }
