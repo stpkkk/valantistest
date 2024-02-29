@@ -8,20 +8,13 @@ import {
 	TablePagination,
 	Table,
 	Paper,
+	Typography,
 } from '@mui/material'
-import { IProduct } from '../../types'
+import { IProduct } from '../../types/types'
 
 interface IAppTable {
 	products: IProduct[]
 }
-// const data = [
-// 	{ id: '415515151', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
-// 	{ id: '41551515', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
-// 	{ id: '415515', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
-// 	{ id: '41151', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
-// 	{ id: '5515151', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
-// 	{ id: '4115151', brand: 'dewdewdew', price: 1600, product: 'Кольцо' },
-// ]
 
 const AppTable: React.FC<IAppTable> = ({ products }) => {
 	const [page, setPage] = useState(0)
@@ -38,8 +31,16 @@ const AppTable: React.FC<IAppTable> = ({ products }) => {
 		setPage(0)
 	}
 
-	return (
-		<Paper sx={{ my: 10 }}>
+	return products.length ? (
+		<Paper>
+			<TablePagination
+				component='div'
+				count={products.length}
+				rowsPerPage={rowsPerPage}
+				page={page}
+				onPageChange={handleChangePage}
+				onRowsPerPageChange={handleChangeRowsPerPage}
+			/>
 			<TableContainer>
 				<Table>
 					<TableHead>
@@ -64,15 +65,11 @@ const AppTable: React.FC<IAppTable> = ({ products }) => {
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<TablePagination
-				component='div'
-				count={products.length}
-				rowsPerPage={rowsPerPage}
-				page={page}
-				onPageChange={handleChangePage}
-				onRowsPerPageChange={handleChangeRowsPerPage}
-			/>
 		</Paper>
+	) : (
+		<Typography component='div' variant='h4' align='center' sx={{ w: '100%' }}>
+			There is no products!😕
+		</Typography>
 	)
 }
 
