@@ -14,21 +14,22 @@ export const theme = createTheme({
 	components: {
 		MuiInputBase: {
 			styleOverrides: {
-				input: {
+				root: {
 					color: 'white',
-					'&:hover': {
-						border: 'red',
-					},
 				},
 			},
 		},
-		MuiOutlinedInput: {
+		MuiTextField: {
 			styleOverrides: {
-				notchedOutline: {
-					borderColor: 'white',
-					// '&:hover': {
-					// 	border: 'red',
-					// },
+				root: {
+					'& .MuiOutlinedInput-root': {
+						'& fieldset': {
+							borderColor: 'white',
+						},
+						'&:hover fieldset': {
+							borderColor: '#ff00ff',
+						},
+					},
 				},
 			},
 		},

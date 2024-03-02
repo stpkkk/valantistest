@@ -1,46 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
 	TableContainer,
 	TableHead,
 	TableRow,
 	TableCell,
 	TableBody,
-	TablePagination,
 	Table,
 	Paper,
 	Typography,
 } from '@mui/material'
 import { IProduct } from '../../types/types'
+import Pagination from './Pagination'
 
 interface IAppTable {
-	products: IProduct[]
+	items: IProduct[]
+	setPage: React.Dispatch<React.SetStateAction<number>>
+	page: number
 }
 
-const AppTable: React.FC<IAppTable> = ({ products }) => {
-	const [page, setPage] = useState(0)
-	const [rowsPerPage, setRowsPerPage] = useState(50)
-
-	const handleChangePage = (_event: unknown, newPage: number) => {
-		setPage(newPage)
-	}
-
-	const handleChangeRowsPerPage = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
-		setRowsPerPage(+event.target.value)
-		setPage(0)
-	}
-
-	return products.length ? (
+const AppTable: React.FC<IAppTable> = ({ items, setPage, page }) => {
+	return items.length > 0 ? (
 		<Paper>
-			<TablePagination
-				component='div'
-				count={products.length}
-				rowsPerPage={rowsPerPage}
-				page={page}
-				onPageChange={handleChangePage}
-				onRowsPerPageChange={handleChangeRowsPerPage}
-			/>
+			<Pagination setPage={setPage} page={page} items={items} />
 			<TableContainer>
 				<Table>
 					<TableHead>
@@ -52,16 +33,14 @@ const AppTable: React.FC<IAppTable> = ({ products }) => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{products
-							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map((product, index) => (
-								<TableRow key={index}>
-									<TableCell>{product.id}</TableCell>
-									<TableCell>{product.product}</TableCell>
-									<TableCell>{product.brand}</TableCell>
-									<TableCell>{product.price} ₽</TableCell>
-								</TableRow>
-							))}
+						{items.map((item, index) => (
+							<TableRow key={index}>
+								<TableCell>{item.id}</TableCell>
+								<TableCell>{item.product}</TableCell>
+								<TableCell>{item.brand || 'Не указан'}</TableCell>
+								<TableCell>{item.price} ₽</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</TableContainer>

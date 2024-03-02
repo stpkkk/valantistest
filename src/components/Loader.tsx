@@ -5,11 +5,11 @@ const Loader: React.FC = () => {
 	return (
 		<Grid
 			container
-			spacing={0}
-			direction='column'
-			alignItems='center'
-			justifyContent='center'
-			sx={{ minHeight: '100vh' }}
+			sx={{
+				position: 'fixed',
+				top: '30%',
+				left: '50%',
+			}}
 		>
 			<CircularProgress size={100} color='inherit' />
 		</Grid>
