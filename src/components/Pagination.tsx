@@ -2,14 +2,23 @@ import React from 'react'
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
 import { IProduct } from '../../types/types'
+import { LIMIT } from '../../app-config'
 
 interface IPagination {
 	setPage: React.Dispatch<React.SetStateAction<number>>
 	page: number
 	items: IProduct[]
+	totalItemsQuantity: number
 }
 
-const Pagination: React.FC<IPagination> = ({ setPage, page, items }) => {
+const Pagination: React.FC<IPagination> = ({
+	setPage,
+	page,
+	items,
+	totalItemsQuantity,
+}) => {
+	const currentItemsQuantity = page * LIMIT + Math.min(LIMIT, items.length)
+
 	const onNextPage = () => {
 		setPage(prev => prev + 1)
 	}
@@ -21,7 +30,7 @@ const Pagination: React.FC<IPagination> = ({ setPage, page, items }) => {
 	return (
 		<Box
 			display='flex'
-			flexDirection='column-reverse'
+			flexDirection='row'
 			justifyContent='flex-end'
 			alignItems='end'
 			gap={2}
@@ -29,8 +38,15 @@ const Pagination: React.FC<IPagination> = ({ setPage, page, items }) => {
 			boxShadow={2}
 		>
 			<Box>
-				<Typography color={'secondary'}>
-					{page + 1}-{items.length}
+				<Typography
+					color='secondary'
+					display='flex'
+					flexDirection='row'
+					gap={0.5}
+					noWrap
+				>
+					<span>Total items:</span>
+					<span>{`${currentItemsQuantity} - ${totalItemsQuantity}`}</span>
 				</Typography>
 			</Box>
 			<Box

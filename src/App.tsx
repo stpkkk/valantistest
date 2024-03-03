@@ -12,11 +12,21 @@ function App() {
 	const [loading, setIsLoading] = useState(false)
 	const [items, setItems] = useState<IProduct[]>([])
 	const [page, setPage] = useState<number>(0)
+	const [totalItemsQuantity, setTotalItemsQuantity] = useState<number>(0)
 	const [filter, setFilter] = useState<IProduct>({
 		product: '',
 		price: '',
 		brand: '',
 	})
+
+	const getTotalItems = async (ids: any) => {
+		try {
+			const totalItemsResponse = await fetchData('get_items', { ids })
+			setTotalItemsQuantity(totalItemsResponse.length)
+		} catch (error) {
+			console.error('Error fetching total items:', error)
+		}
+	}
 
 	// Function to construct updated filters
 	const updateFilters = () => {
@@ -46,8 +56,10 @@ function App() {
 				offset: page * LIMIT,
 				limit: LIMIT,
 			})
+			const totalIds = await fetchData('get_ids')
 
-			// Construct updated filters
+			getTotalItems(totalIds)
+
 			const updatedFilters = updateFilters()
 
 			if (Object.keys(updatedFilters).length > 0) {
@@ -64,7 +76,6 @@ function App() {
 
 				const uniqueItems = removeDuplicates(itemsResult)
 				setItems(uniqueItems)
-				console.log(items)
 			} else {
 				setItems([])
 			}
@@ -88,7 +99,12 @@ function App() {
 				setPage={setPage}
 			/>
 			{!loading ? (
-				<AppTable items={items} setPage={setPage} page={page} />
+				<AppTable
+					items={items}
+					setPage={setPage}
+					page={page}
+					totalItemsQuantity={totalItemsQuantity}
+				/>
 			) : (
 				<Loader />
 			)}

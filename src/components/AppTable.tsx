@@ -16,12 +16,23 @@ interface IAppTable {
 	items: IProduct[]
 	setPage: React.Dispatch<React.SetStateAction<number>>
 	page: number
+	totalItemsQuantity: number
 }
 
-const AppTable: React.FC<IAppTable> = ({ items, setPage, page }) => {
+const AppTable: React.FC<IAppTable> = ({
+	items,
+	setPage,
+	page,
+	totalItemsQuantity,
+}) => {
 	return items.length > 0 ? (
 		<Paper>
-			<Pagination setPage={setPage} page={page} items={items} />
+			<Pagination
+				setPage={setPage}
+				page={page}
+				items={items}
+				totalItemsQuantity={totalItemsQuantity}
+			/>
 			<TableContainer>
 				<Table>
 					<TableHead>
