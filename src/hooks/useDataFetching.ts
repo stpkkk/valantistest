@@ -11,78 +11,70 @@ const useDataFetching = (initialFilter: IProduct) => {
 	const [totalItemsQuantity, setTotalItemsQuantity] = useState<number>(0)
 	const [filter, setFilter] = useState(initialFilter)
 
-	const getTotalItems = async (ids: IProduct[]) => {
-		try {
-			const totalItemsResponse = await fetchData('get_items', { ids })
-			setTotalItemsQuantity(totalItemsResponse.length)
-		} catch (error: any) {
-			console.error(
-				'Error fetching total items:',
-				error.message || 'An error occurred',
-				error
-			)
-		}
-	}
-
-	const filterItemIds = async (
-		allItemIds: IProduct[],
-		updatedFilters: Partial<IProduct>
-	) => {
-		if (Object.keys(updatedFilters).length === 0) return allItemIds
-
-		const filteredIds = await fetchData('filter', updatedFilters)
-		return allItemIds.filter(id => filteredIds.includes(id))
-	}
-
 	const updateFilters = () => {
+		const { product, price, brand } = filter
 		const updatedFilters: Partial<IProduct> = {}
 
-		if (filter.product?.trim().toLowerCase()) {
-			updatedFilters.product = filter.product.trim()
+		if (product?.trim()) {
+			updatedFilters.product = product.trim().toLowerCase()
 		}
 
-		const price = +parseFloat(filter.price?.toString())
-		if (!Number.isNaN(price) && price > 0) {
-			updatedFilters.price = price
+		const parsedPrice = parseFloat(price?.toString() || '')
+		if (!Number.isNaN(parsedPrice) && parsedPrice > 0) {
+			updatedFilters.price = parsedPrice
 		}
 
-		if (filter.brand && filter.brand.trim().toLowerCase()) {
-			updatedFilters.brand = filter.brand.trim()
+		if (brand?.trim()) {
+			updatedFilters.brand = brand.trim().toLowerCase()
 		}
 
 		return updatedFilters
+	}
+
+	const fetchItems = async (ids: string[]) => {
+		try {
+			const itemsResult = await fetchData('get_items', { ids })
+			const uniqueItems = removeDuplicates(itemsResult)
+			setItems(uniqueItems)
+			return uniqueItems
+		} catch (error: any) {
+			console.error(
+				'Error fetching items:',
+				error.message || 'An error occurred',
+				error
+			)
+			throw error
+		}
 	}
 
 	const getItems = async () => {
 		setLoading(true)
 
 		try {
-			const totalIds = await fetchData('get_ids')
-			getTotalItems(totalIds)
-
 			const updatedFilters = updateFilters()
-			const itemIds = await fetchData('get_ids', {
-				offset: page * LIMIT,
-				limit: LIMIT,
-			})
-			const filteredIds = await filterItemIds(itemIds, updatedFilters)
-			const filteredItemIds = itemIds.filter(id => filteredIds.includes(id))
 
-			if (filteredItemIds.length > 0) {
-				const itemsResult = await fetchData('get_items', {
-					ids: filteredItemIds,
-				})
-				setItems(removeDuplicates(itemsResult))
+			if (Object.values(updatedFilters).length > 0) {
+				const filteredIds = await fetchData('filter', updatedFilters)
+
+				const paginatedFilteredIds = filteredIds.slice(
+					page * LIMIT,
+					(page + 1) * LIMIT
+				)
+
+				const filteredItemsResult = await fetchItems(paginatedFilteredIds)
+				setItems(filteredItemsResult)
+				setTotalItemsQuantity(filteredIds.length)
 			} else {
-				setItems([])
+				const allItemIds = await fetchData('get_ids')
+				const allItemsResult = await fetchItems(allItemIds)
+				setItems(allItemsResult.slice(page * LIMIT, (page + 1) * LIMIT))
+				setTotalItemsQuantity(allItemsResult.length)
 			}
 		} catch (error: any) {
 			console.error(error.message || 'An error occurred', error)
-			// Retry the request if error occurred
+			// Retry the request if an error occurred
 			console.log('Request due to error')
-			setTimeout(() => {
-				getItems()
-			}, REQUEST_DELAY)
+			setTimeout(getItems, REQUEST_DELAY)
 		} finally {
 			setLoading(false)
 		}

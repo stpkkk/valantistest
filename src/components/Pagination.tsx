@@ -17,7 +17,7 @@ const Pagination: React.FC<IPagination> = ({
 	items,
 	totalItemsQuantity,
 }) => {
-	const currentItemsQuantity = page * LIMIT + Math.min(LIMIT, items.length)
+	const currentItemsQuantity = page * LIMIT + Math.min(LIMIT, items.length) || 0
 
 	const onNextPage = () => {
 		setPage(prev => prev + 1)
@@ -44,6 +44,7 @@ const Pagination: React.FC<IPagination> = ({
 					flexDirection='row'
 					gap={0.5}
 					noWrap
+					sx={{ fontWeight: 'bold' }}
 				>
 					<span>{`${currentItemsQuantity} - ${totalItemsQuantity}`}</span>
 				</Typography>

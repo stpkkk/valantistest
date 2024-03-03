@@ -47,7 +47,7 @@ const AppTable: React.FC<IAppTable> = ({
 						{items.map((item, index) => (
 							<TableRow key={index}>
 								<TableCell>{item.id}</TableCell>
-								<TableCell>{item.product}</TableCell>
+								<TableCell sx={{ maxWidth: '250px' }}>{item.product}</TableCell>
 								<TableCell>{item.brand || 'Не указан'}</TableCell>
 								<TableCell>{item.price} ₽</TableCell>
 							</TableRow>
@@ -58,7 +58,7 @@ const AppTable: React.FC<IAppTable> = ({
 		</Paper>
 	) : (
 		<Typography component='div' variant='h4' align='center' sx={{ w: '100%' }}>
-			There is no products!😕
+			Bad request or something went wrong 😕
 		</Typography>
 	)
 }

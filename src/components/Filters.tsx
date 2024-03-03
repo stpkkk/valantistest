@@ -47,7 +47,7 @@ const Filters: React.FC<IFilters> = ({
 					label='Name'
 					variant='outlined'
 					name='product'
-					value={filter.product}
+					value={filter.product?.toLowerCase()}
 					onChange={handleInputChange}
 				/>
 				<TextField
@@ -63,7 +63,7 @@ const Filters: React.FC<IFilters> = ({
 					label='Brand'
 					variant='outlined'
 					name='brand'
-					value={filter.brand}
+					value={filter.brand?.toLowerCase()}
 					onChange={handleInputChange}
 				/>
 				<Button

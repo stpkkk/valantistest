@@ -1,6 +1,5 @@
 import md5 from 'md5'
 import { API_URL, PASSWORD } from '../app-config'
-import { IProduct } from '../types/types'
 
 const createAuthString = () => {
 	const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '')
@@ -8,10 +7,7 @@ const createAuthString = () => {
 	return md5(authString)
 }
 
-export const fetchData = async (
-	action: string,
-	params = {}
-): Promise<IProduct[]> => {
+export const fetchData = async (action: string, params = {}) => {
 	try {
 		const requestOptions = {
 			method: 'POST',
