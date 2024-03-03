@@ -1,94 +1,24 @@
-import { useEffect, useState } from 'react'
 import { Container } from '@mui/material'
 import AppTable from './components/AppTable'
 import Loader from './components/Loader'
 import Filters from './components/Filters'
-import { fetchData } from '../api/index.'
-import { LIMIT } from '../app-config'
-import { IProduct } from '../types/types'
-import { removeDuplicates } from './utils/removeDuplicates'
+import useDataFetching from './hooks/useDataFetching'
 
 function App() {
-	const [loading, setIsLoading] = useState(false)
-	const [items, setItems] = useState<IProduct[]>([])
-	const [page, setPage] = useState<number>(0)
-	const [totalItemsQuantity, setTotalItemsQuantity] = useState<number>(0)
-	const [filter, setFilter] = useState<IProduct>({
+	const {
+		loading,
+		items,
+		page,
+		totalItemsQuantity,
+		filter,
+		setFilter,
+		setPage,
+		getItems,
+	} = useDataFetching({
 		product: '',
 		price: '',
 		brand: '',
 	})
-
-	const getTotalItems = async (ids: any) => {
-		try {
-			const totalItemsResponse = await fetchData('get_items', { ids })
-			setTotalItemsQuantity(totalItemsResponse.length)
-		} catch (error) {
-			console.error('Error fetching total items:', error)
-		}
-	}
-
-	// Function to construct updated filters
-	const updateFilters = () => {
-		const updatedFilters: Partial<IProduct> = {}
-
-		if (filter.product?.trim().toLowerCase()) {
-			updatedFilters.product = filter.product.trim()
-		}
-
-		const price = +parseFloat(filter.price.toString())
-		if (!Number.isNaN(price) && price > 0) {
-			updatedFilters.price = price
-		}
-
-		if (filter.brand && filter.brand.trim().toLowerCase()) {
-			updatedFilters.brand = filter.brand.trim()
-		}
-
-		return updatedFilters
-	}
-
-	const getItems = async () => {
-		setIsLoading(true)
-		try {
-			// Get list of ids
-			let getIdsResponse = await fetchData('get_ids', {
-				offset: page * LIMIT,
-				limit: LIMIT,
-			})
-			const totalIds = await fetchData('get_ids')
-
-			getTotalItems(totalIds)
-
-			const updatedFilters = updateFilters()
-
-			if (Object.keys(updatedFilters).length > 0) {
-				// Filter ids based on the updated filters
-				const filteredIds = await fetchData('filter', updatedFilters)
-				getIdsResponse = getIdsResponse.filter(id => filteredIds.includes(id))
-			}
-
-			if (getIdsResponse.length > 0) {
-				// Fetch detailed items based on filtered ids
-				const itemsResult = await fetchData('get_items', {
-					ids: getIdsResponse,
-				})
-
-				const uniqueItems = removeDuplicates(itemsResult)
-				setItems(uniqueItems)
-			} else {
-				setItems([])
-			}
-		} catch (error) {
-			console.error(error)
-		} finally {
-			setIsLoading(false)
-		}
-	}
-
-	useEffect(() => {
-		getItems()
-	}, [page])
 
 	return (
 		<Container maxWidth='lg' sx={{ py: 10, px: 4 }}>
