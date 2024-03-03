@@ -1,7 +1,6 @@
-// useDataFetching.js
 import { useEffect, useState } from 'react'
 import { fetchData } from '../../api/index.'
-import { LIMIT } from '../../app-config'
+import { LIMIT, REQUEST_DELAY } from '../../app-config'
 import { IProduct } from '../../types/types'
 import { removeDuplicates } from '../utils/removeDuplicates'
 
@@ -12,7 +11,7 @@ const useDataFetching = (initialFilter: IProduct) => {
 	const [totalItemsQuantity, setTotalItemsQuantity] = useState<number>(0)
 	const [filter, setFilter] = useState(initialFilter)
 
-	const getTotalItems = async (ids: any) => {
+	const getTotalItems = async (ids: IProduct[]) => {
 		try {
 			const totalItemsResponse = await fetchData('get_items', { ids })
 			setTotalItemsQuantity(totalItemsResponse.length)
@@ -79,6 +78,11 @@ const useDataFetching = (initialFilter: IProduct) => {
 			}
 		} catch (error: any) {
 			console.error(error.message || 'An error occurred', error)
+			// Retry the request if error occurred
+			console.log('Request due to error')
+			setTimeout(() => {
+				getItems()
+			}, REQUEST_DELAY)
 		} finally {
 			setLoading(false)
 		}

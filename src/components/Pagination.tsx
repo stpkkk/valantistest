@@ -45,7 +45,6 @@ const Pagination: React.FC<IPagination> = ({
 					gap={0.5}
 					noWrap
 				>
-					<span>Total items:</span>
 					<span>{`${currentItemsQuantity} - ${totalItemsQuantity}`}</span>
 				</Typography>
 			</Box>
