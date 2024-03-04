@@ -57,6 +57,7 @@ const Filters: React.FC<IFilters> = ({
 					name='price'
 					value={filter.price}
 					onChange={handleInputChange}
+					type='number'
 				/>
 				<TextField
 					id='brand'
