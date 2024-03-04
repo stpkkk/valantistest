@@ -1,4 +1,4 @@
-# <a href="stpk-valantis-test-task.netlify.app">Valantis test task</a>
+# <a href="https://stpk-valantis-test-task.netlify.app/">Valantis test task</a>
 
 ## App stack
 
