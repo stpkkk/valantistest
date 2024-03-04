@@ -9,8 +9,8 @@ import {
 	Paper,
 	Typography,
 } from '@mui/material'
-import { IProduct } from '../../types/types'
 import Pagination from './Pagination'
+import { IProduct } from '../../types'
 
 interface IAppTable {
 	items: IProduct[]

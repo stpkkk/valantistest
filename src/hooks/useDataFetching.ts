@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { fetchData } from '../../api/index.'
 import { LIMIT, REQUEST_DELAY } from '../../app-config'
-import { IProduct } from '../../types/types'
-import { removeDuplicates } from '../utils/removeDuplicates'
+import { removeDuplicates } from '../utils'
+import { IProduct } from '../../types'
 
 const useDataFetching = (initialFilter: IProduct) => {
 	const [loading, setLoading] = useState<boolean>(false)

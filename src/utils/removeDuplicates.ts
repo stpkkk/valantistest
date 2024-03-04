@@ -1,6 +1,6 @@
-import { IProduct } from '../../types/types'
+import { IProduct } from '../../types'
 
-export const removeDuplicates = (items: IProduct[]) => {
+const removeDuplicates = (items: IProduct[]) => {
 	const uniqueItemsMap = new Map()
 	items.forEach(item => {
 		if (!uniqueItemsMap.has(item.id)) {
@@ -9,3 +9,5 @@ export const removeDuplicates = (items: IProduct[]) => {
 	})
 	return Array.from(uniqueItemsMap.values())
 }
+
+export default removeDuplicates

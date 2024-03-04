@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, Grid, TextField } from '@mui/material'
-import { IProduct } from '../../types/types'
+import { IProduct } from '../../types'
 
 interface IFilters {
 	filter: Partial<IProduct>

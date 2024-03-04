@@ -1,7 +1,7 @@
 import React from 'react'
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
-import { IProduct } from '../../types/types'
+import { IProduct } from '../../types'
 import { LIMIT } from '../../app-config'
 
 interface IPagination {

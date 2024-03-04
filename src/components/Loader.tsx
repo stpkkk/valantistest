@@ -1,5 +1,5 @@
-import { CircularProgress, Grid } from '@mui/material'
 import React from 'react'
+import { CircularProgress, Grid } from '@mui/material'
 
 const Loader: React.FC = () => {
 	return (

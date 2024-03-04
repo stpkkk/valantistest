@@ -1,8 +1,6 @@
 import { Container } from '@mui/material'
-import AppTable from './components/AppTable'
-import Loader from './components/Loader'
-import Filters from './components/Filters'
-import useDataFetching from './hooks/useDataFetching'
+import { AppTable, Filters, Loader } from './components'
+import { useDataFetching } from './hooks'
 
 function App() {
 	const {
