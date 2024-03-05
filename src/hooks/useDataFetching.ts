@@ -9,7 +9,7 @@ const useDataFetching = (initialFilter: IProduct) => {
 	const [items, setItems] = useState<IProduct[]>([])
 	const [page, setPage] = useState<number>(0)
 	const [totalItemsQuantity, setTotalItemsQuantity] = useState<number>(0)
-	const [filter, setFilter] = useState(initialFilter)
+	const [filter, setFilter] = useState<Partial<IProduct>>(initialFilter)
 
 	const updateFilters = () => {
 		const { product, price, brand } = filter
@@ -49,7 +49,6 @@ const useDataFetching = (initialFilter: IProduct) => {
 
 	const getItems = async () => {
 		setLoading(true)
-
 		try {
 			const updatedFilters = updateFilters()
 

@@ -5,7 +5,7 @@ import { IProduct } from '../../types'
 interface IFilters {
 	filter: Partial<IProduct>
 	getItems: () => void
-	setFilter: React.Dispatch<React.SetStateAction<IProduct>>
+	setFilter: React.Dispatch<React.SetStateAction<Partial<IProduct>>>
 	setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
